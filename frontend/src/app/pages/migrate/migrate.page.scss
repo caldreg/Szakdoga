@@ -1,0 +1,58 @@
+#container {
+    display: block;
+    margin: auto;
+    margin-top: 50px;
+}
+
+ion-segment {
+    width: 100%;
+}
+
+.content-hist {
+    animation: in;
+    animation-duration: 0.4s;
+}
+
+@keyframes in {
+    from {
+        margin-top: 40px;
+        opacity: 0;
+    }
+    to {
+        margin-top: 0px;
+        opacity: 1;
+    }
+}
+
+ion-loading {
+    color: green;
+}
+
+.collections-list {
+    animation: in 0.4s;
+}
+
+.collection-loading {
+    --background: #222;
+    --spinner-color: #fff;
+    color: #fff;
+}
+
+.users-list {
+    animation: in 0.4s;
+}
+
+.user-loading {
+    --background: #222;
+    --spinner-color: #fff;
+    color: #fff;
+}
+
+ion-content {
+    --background: url('/assets/wave_bg_menu.png') no-repeat center bottom / cover;
+}
+
+.panel {
+    width: 70%;
+    margin-top: 32px;
+}

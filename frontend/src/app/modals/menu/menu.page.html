@@ -1,0 +1,80 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons mode="ios" slot="secondary">
+      <ion-button (click)="closeMenu()" fill="solid" mode="md" color="secondary">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Services</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div style="padding: 40px">
+
+    <div style="display: block">
+      <h4>General</h4>
+    </div>
+
+    <div (click)="goTo('/user-management')" class="menu-button unselectable">
+      <div class="menu-content">
+        <ion-icon class="icon" name="people-outline"></ion-icon>
+        <h3 class="title">User management</h3>
+      </div>
+    </div>
+
+    <div (click)="goTo('/projects')" class="menu-button unselectable">
+      <div class="menu-content">
+        <ion-icon class="icon" name="albums-outline"></ion-icon>
+        <h3 class="title">Integrated Projects</h3>
+      </div>
+    </div>
+
+    <div style="display: block">
+      <h4>Deployments, Firebase & more</h4>
+    </div>
+
+    <div class="menu-button unselectable">
+      <div class="menu-content">
+        <ion-icon class="icon" name="analytics-outline"></ion-icon>
+        <h3 class="title">Deployments</h3>
+      </div>
+    </div>
+
+    <div class="menu-button unselectable">
+      <div class="menu-content">
+        <ion-icon class="icon" name="document-text-outline"></ion-icon>
+        <h3 class="title">Testing</h3>
+      </div>
+    </div>
+
+    <div (click)="goTo('/migrate')" class="menu-button unselectable">
+      <div class="menu-content">
+        <ion-icon class="icon" name="server-outline"></ion-icon>
+        <h3 class="title">Data migration</h3>
+      </div>
+    </div>
+
+    <div style="display: block">
+      <h4>Monitoring</h4>
+    </div>
+
+    <div class="menu-button unselectable">
+      <div class="menu-content">
+        <ion-icon class="icon" name="browsers-outline"></ion-icon>
+        <h3 class="title">Servers</h3>
+      </div>
+    </div>
+
+    <div class="menu-button unselectable">
+      <div class="menu-content">
+        <ion-icon class="icon" name="bus-outline"></ion-icon>
+        <h3 class="title">SASMob</h3>
+      </div>
+    </div>
+
+
+  </div>
+
+</ion-content>

@@ -1,0 +1,56 @@
+<ion-header>
+  <app-handel></app-handel>
+  <h2>
+    Start rollback
+    <br>
+    <span>
+      {{ project.name }} project
+    </span>
+  </h2>
+</ion-header>
+<ion-content>
+  <div id="content">
+
+    <ion-segment [(ngModel)]="state" value="Staging" mode="md" (ionChange)="segmentChange($event.detail.value)">
+      <ion-segment-button value="{{stage.name}}" *ngFor="let stage of project.stages | slice:1:3 ">{{ stage.name }}
+      </ion-segment-button>
+    </ion-segment>
+
+    <div id="stages">
+      <div *ngIf="state === 'Staging'" mode="md" class="stage">
+        <ion-item>
+          <ion-icon slot="start" name="git-branch-outline"></ion-icon>
+          <ion-select [(ngModel)]="tag" value="master" placeholder="Version to deploy">
+            <ion-select-option *ngFor="let tag of tags" value="{{tag}}">{{tag}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-button (click)="startRollback()">
+            <ion-icon slot="start" name="git-pull-request-outline"></ion-icon>
+            Start Rollback
+          </ion-button>
+          <ion-input disabled></ion-input>
+        </ion-item>
+      </div>
+    </div>
+
+    <div id="stages">
+      <div *ngIf="state === 'Production'" mode="md" class="stage">
+        <ion-item>
+          <ion-icon slot="start" name="git-branch-outline"></ion-icon>
+          <ion-select [(ngModel)]="tag" value="master" placeholder="Version to deploy">
+            <ion-select-option *ngFor="let tag of tags" value="{{tag}}">{{tag}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-button (click)="startRollback()">
+            <ion-icon slot="start" name="git-pull-request-outline"></ion-icon>
+            Start Rollback
+          </ion-button>
+          <ion-input disabled></ion-input>
+        </ion-item>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

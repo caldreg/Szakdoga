@@ -1,0 +1,36 @@
+<ion-header mode="md">
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-button disabled>
+                <ion-icon size="large" name="library-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons mode="ios" slot="secondary">
+            <ion-button (click)="openMenu()" fill="solid" mode="md" color="secondary">
+                <ion-icon name="grid-outline"></ion-icon>
+            </ion-button>
+            <ion-button (click)="logout()" fill="solid" mode="md" color="danger">
+                <ion-icon name="exit"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Dashboard</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <!-- <ion-card *ngIf="logs.loaded" mode="ios" id="logs">
+    <ion-card-header>
+      <ion-card-title>Recent events</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item *ngFor="let log of logs.data">
+        <ion-chip color="primary" outline="true">
+          {{ log.type }}
+        </ion-chip>
+        <p style="margin-left: 4px;">{{ log.value }}</p>
+      </ion-item>
+    </ion-card-content>
+  </ion-card> -->
+
+</ion-content>

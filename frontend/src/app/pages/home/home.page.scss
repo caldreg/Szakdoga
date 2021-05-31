@@ -1,0 +1,11 @@
+ion-content {
+  --background: url('/assets/wave_bg_main.png') no-repeat center bottom / cover;
+}
+
+#logs {
+  width: 50%;
+}
+
+#logs > ion-item {
+  margin-top: 10px;
+}

@@ -1,0 +1,41 @@
+<ion-header mode="md">
+  <ion-toolbar mode="md" color="primary">
+    <ion-buttons mode="md" slot="start">
+      <ion-button disabled>
+        <ion-icon size="large" name="people"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons mode="md" slot="secondary">
+      <ion-button color="secondary" fill="solid" mode="md">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-button>
+      <ion-button [routerLink]="['/home']" fill="solid" mode="md" color="white">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>User management</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-card class="panel" mode="ios">
+    <ion-card-header>
+      <ion-card-title>Registered users</ion-card-title>
+      <ion-card-subtitle>Users from Firebase</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-spinner *ngIf="!loaded"></ion-spinner>
+
+      <ion-list *ngIf="loaded">
+        <ion-item *ngFor="let user of users">
+          {{ user.email }}
+          <ion-button (click)="deleteUser(user.uid)" slot="end" color="danger">delete user</ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+
+  </ion-card>
+
+</ion-content>

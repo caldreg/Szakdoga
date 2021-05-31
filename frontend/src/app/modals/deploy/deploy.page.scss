@@ -1,0 +1,41 @@
+ion-header {
+  padding: 20px;
+  padding-top: 14px;
+  background: var(--ion-color-primary);
+  color: white;
+}
+
+h2 {
+  margin: 0px;
+  margin-top: 4px;
+  font-size: 26px;
+  line-height: 22px;
+}
+
+h2 > span {
+  font-size: 18px;
+  font-weight: normal;
+}
+
+ion-segment {
+  background-color: rgba(0,0,0,0.04);
+}
+
+.stage {
+  padding-top: 20px;
+  width: 90%;
+  margin: auto;
+  max-width: 700px;
+  animation: in 0.4s;
+}
+
+@keyframes in {
+  from {
+    transform: translateY(80px);
+    opacity: 0;
+  }
+  to {
+    transform: '';
+    opacity: 1;
+  }
+}

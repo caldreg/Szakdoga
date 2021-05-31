@@ -1,0 +1,58 @@
+{
+  "name": "VirtualMic",
+  "description": "An ionic project",
+  "repository": "https://stash.sed.hu/scm/vm/vm-pwa.git",
+  "key": "VM",
+  "status": "",
+  "lastDeploy": "",
+  "stages": [
+    {
+      "name": "Development",
+      "site": "vm-pre",
+      "alias": "default",
+      "branch": "master",
+      "version": "",
+      "folder": "web"
+    },
+    {
+      "name": "Staging",
+      "site": "vmeqalm-staging",
+      "alias": "staging",
+      "branch": "master",
+      "version": "",
+      "folder": "web"
+    },
+    {
+      "name": "Production",
+      "site": "vm-eqalm",
+      "alias": "production",
+      "branch": "master",
+      "version": "",
+      "folder": "web"
+    },
+    {
+      "name": "Demo-Production",
+      "site": "vm-production-demo",
+      "alias": "production",
+      "branch": "release/1.0.13",
+      "version": "",
+      "folder": "web"
+    },
+    {
+      "name": "Demo-Development",
+      "site": "vm-dev-demo",
+      "alias": "default",
+      "branch": "release/1.0.13",
+      "version": "",
+      "folder": "web"
+    },
+    {
+      "name": "Demo-Staging",
+      "site": "vm-staging-demo",
+      "alias": "staging",
+      "branch": "release/1.0.13",
+      "version": "",
+      "folder": "web"
+    }
+  ]
+}

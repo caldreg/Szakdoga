@@ -1,0 +1,34 @@
+{
+    "name": "COG-Profile",
+    "description": "An ionic project",
+    "repository": "https://stash.sed.hu/scm/cog/cogprofile-pwa.git",
+    "key": "COG",
+    "status": "",
+    "lastDeploy": "",
+    "stages": [
+      {
+        "name": "Development",
+        "site": "cog-pwa-dev",
+        "alias": "default",
+        "branch": "master",
+        "version": "",
+        "folders": []
+      },
+      {
+        "name": "Staging",
+        "site": "cog-staging-6cf9d",
+        "alias": "staging",
+        "branch": "master",
+        "version": "",
+        "folders": []
+      },
+      {
+        "name": "Production",
+        "site": "cog-profile",
+        "alias": "production",
+        "branch": "master",
+        "version": "",
+        "folders": []
+      }
+    ]
+  }

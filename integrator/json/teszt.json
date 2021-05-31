@@ -1,0 +1,34 @@
+{
+    "name": "TestProject",
+    "description": "TestProject",
+    "repository": "https://stash.sed.hu/scm/dt/firebase-test-project.git",
+    "key": "DT",
+    "status": "",
+    "lastDeploy": "",
+    "stages": [
+      {
+        "name": "Development",
+        "site": "dashboard-test-578d0",
+        "alias": "default",
+        "branch": "master",
+        "version": "",
+        "folder": "web"
+      },
+      {
+        "name": "Staging",
+        "site": "dashboard-test-578d0",
+        "alias": "staging",
+        "branch": "master",
+        "version": "",
+        "folder": "web"
+      },
+      {
+        "name": "Production",
+        "site": "dashboard-test-578d0",
+        "alias": "production",
+        "branch": "master",
+        "version": "",
+        "folder": "web"
+      }
+    ]
+  }

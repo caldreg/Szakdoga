@@ -1,0 +1,44 @@
+ion-content {
+  --background: url('/assets/wave_bg_menu.png') no-repeat center bottom / cover;
+}
+
+.menu-button {
+  width: 250px;
+  border: 1px solid var(--ion-color-light);
+
+  padding: 10px;
+
+  border-radius: 6px;
+  display: inline-block;
+  margin: 10px;
+
+  cursor: pointer;
+}
+
+.menu-button:hover {
+  background-color: var(--ion-color-light);
+  transition: 0.4s;
+}
+
+.menu-content {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  font-size: 24px;
+  display: block;
+}
+
+.title {
+  margin-left: 6px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+h3 {
+  color: var(--ion-color-medium);
+  margin: 0px;
+  font-weight: 100;
+
+}

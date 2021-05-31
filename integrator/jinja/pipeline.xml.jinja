@@ -1,0 +1,111 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<flow-definition plugin="workflow-job@2.36">
+	<actions />
+	<description>{{ description }}</description>
+	<keepDependencies>false</keepDependencies>
+	<properties>
+		<hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.11" />
+		<org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty/>
+		<org.thoughtslive.jenkins.plugins.hubot.config.HubotJobProperty plugin="hubot-steps@2.0.5">
+			<siteNames />
+			<enableNotifications>false</enableNotifications>
+		</org.thoughtslive.jenkins.plugins.hubot.config.HubotJobProperty>
+		<hudson.model.ParametersDefinitionProperty>
+			<parameterDefinitions>
+			
+				<hudson.model.StringParameterDefinition>
+					<name>version</name>
+					<description>Version of the project.</description>
+					<defaultValue />
+					<trim>false</trim>
+				</hudson.model.StringParameterDefinition>
+
+				<hudson.model.StringParameterDefinition>
+					<name>who</name>
+					<description>Name of the commiter.</description>
+					<defaultValue>git</defaultValue>
+					<trim>false</trim>
+				</hudson.model.StringParameterDefinition>
+
+				<hudson.model.StringParameterDefinition>
+					<name>mode</name>
+					<description>The mode of the build. (Pre, Staging, Production).</description>
+					<defaultValue>pre</defaultValue>
+					<trim>false</trim>
+				</hudson.model.StringParameterDefinition>
+
+				<hudson.model.StringParameterDefinition>
+					<name>checkout</name>
+					<description>Branch, commitID or tag to checkout.</description>
+					<defaultValue>{{ branch }}</defaultValue>
+					<trim>false</trim>
+				</hudson.model.StringParameterDefinition>
+
+				<hudson.model.StringParameterDefinition>
+					<name>message</name>
+					<description>This is the commit message.</description>
+					<defaultValue />
+					<trim>false</trim>
+				</hudson.model.StringParameterDefinition>
+
+				<hudson.model.BooleanParameterDefinition>
+					<name>lint</name>
+					<description>Lint result deploy dependency</description>
+					<defaultValue>false</defaultValue>
+				</hudson.model.BooleanParameterDefinition>
+
+				<hudson.model.BooleanParameterDefinition>
+					<name>e2e</name>
+					<description>E2e test result deploy dependency.</description>
+					<defaultValue>false</defaultValue>
+				</hudson.model.BooleanParameterDefinition>
+
+				<hudson.model.BooleanParameterDefinition>
+					<name>unit</name>
+					<description>Unit test result deploy dependency.</description>
+					<defaultValue>false</defaultValue>
+				</hudson.model.BooleanParameterDefinition>
+				
+				<hudson.model.BooleanParameterDefinition>
+					<name>manualBuild</name>
+					<description>If set to true, a manual build will start.</description>
+					<defaultValue>false</defaultValue>
+				</hudson.model.BooleanParameterDefinition>
+
+			</parameterDefinitions>
+		</hudson.model.ParametersDefinitionProperty>
+		<org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+			<triggers>
+				<hudson.triggers.SCMTrigger>
+					<spec>*/3 * * * *</spec>
+					<ignorePostCommitHooks>false</ignorePostCommitHooks>
+				</hudson.triggers.SCMTrigger>
+			</triggers>
+		</org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+	</properties>
+	<definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@2.77">
+		<scm class="hudson.plugins.git.GitSCM" plugin="git@4.0.0">
+			<configVersion>2</configVersion>
+			<userRemoteConfigs>
+				<hudson.plugins.git.UserRemoteConfig>
+					<url>https://stash.sed.hu/scm/dep/jenkins-project-generator.git</url>
+					<credentialsId>devops</credentialsId>
+				</hudson.plugins.git.UserRemoteConfig>
+			</userRemoteConfigs>
+			<branches>
+				<hudson.plugins.git.BranchSpec>
+					<name>*/master</name>
+				</hudson.plugins.git.BranchSpec>
+			</branches>
+			<doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+			<submoduleCfg class="list" />
+			<extensions>
+				<hudson.plugins.git.extensions.impl.IgnoreNotifyCommit/>
+			</extensions>
+		</scm>
+		<scriptPath>ProjectFiles/{{path_to_jenkinsfile}}</scriptPath>
+		<lightweight>true</lightweight>
+	</definition>
+	<triggers />
+	<disabled>false</disabled>
+</flow-definition>

@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button disabled>
+        <ion-icon size="large" name="cube"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Integrate new project</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-segment [(ngModel)]="panel" value="web">
+    <ion-segment-button value="web" layout="icon-start">
+      <ion-label>Web</ion-label>
+      <ion-icon name="earth-outline"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button value="mobile" layout="icon-start">
+      <ion-label>Mobile</ion-label>
+      <ion-icon name="phone-portrait-outline"></ion-icon>
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-list *ngIf="panel === 'web'" mode="md">
+    <ion-list-header mode="ios">Basic informations</ion-list-header>
+    <ion-item>
+      <!-- <ion-icon slot="start" name="pricetag-outline"></ion-icon> -->
+      <ion-label position="floating">Name</ion-label>
+      <ion-input [(ngModel)]="project.name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <!-- <ion-icon slot="start" name="information-circle-outline"></ion-icon> -->
+      <ion-label position="floating">Description</ion-label>
+      <ion-input [(ngModel)]="project.description"></ion-input>
+    </ion-item>
+    
+    <ion-list-header mode="ios">Project details</ion-list-header>
+    <ion-item>
+      <!-- <ion-icon slot="start" name="key-outline"></ion-icon> -->
+      <ion-label position="floating">Jira Key</ion-label>
+      <ion-input [(ngModel)]="project.key"></ion-input>
+    </ion-item>
+    <ion-item>
+      <!-- <ion-icon slot="start" name="cloud-upload-outline"></ion-icon> -->
+      <ion-label position="floating">Repository (Access with DevOps user)</ion-label>
+      <ion-input pattern="https:\/\/stash.sed.hu\/scm\/\w+\/.+.git" [(ngModel)]="project.repository" #repository></ion-input>
+    </ion-item>
+
+    <ion-list-header mode="ios">Stages</ion-list-header>
+    <ion-item>
+      <ion-button [disabled]="!isEmpty || emptyStages " (click)="addStage()" size="small">
+        <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+        Add Stage
+      </ion-button>
+      <ion-button color="danger" (click)="removeLast()" size="small">
+        <ion-icon slot="start" name="remove-circle-outline"></ion-icon>
+        Remove last stage
+      </ion-button>
+    </ion-item>
+    <ion-list (ionChange)="checkStages()"  *ngFor="let stage of project.stages; let i = index">
+      <ion-list-header style="font-weight: bold;">{{project.stages[i].name || 'Unnamed stage' }}</ion-list-header>
+      <ion-item mode="md">
+        <ion-label position="floating">Name</ion-label>
+        <ion-input [(ngModel)]="project.stages[i].name" ></ion-input>
+      </ion-item>
+      <ion-item mode="md">
+        <ion-label slot="start">www.</ion-label>
+        <ion-input placeholder="firebase-hosting-site-id" [(ngModel)]="project.stages[i].site"></ion-input>
+        <ion-label slot="end">web.app</ion-label>
+      </ion-item>
+      <ion-item mode="md">
+        <ion-label position="floating">Firebase alias</ion-label>
+        <ion-input [(ngModel)]="project.stages[i].alias" ></ion-input>
+      </ion-item>
+      <ion-item mode="md">
+        <ion-label position="floating">Branch</ion-label>
+        <ion-input [(ngModel)]="project.stages[i].branch" ></ion-input>
+      </ion-item>
+      <ion-item mode="md">
+        <ion-label position="floating">Folder</ion-label>
+        <ion-input [(ngModel)]="project.stages[i].folders" ></ion-input>
+      </ion-item>
+    </ion-list>
+  </ion-list>
+</ion-content>
+
+<ion-footer style="padding: 8px;">
+  <ion-button [disabled]="!isStageEmpty || emptyStages" (click)="generate()">
+    <ion-icon slot="start" name="add"></ion-icon>
+    Add project
+  </ion-button>
+  <ion-button (click)="dismiss()" color="danger">
+    <ion-icon slot="start" name="close"></ion-icon>
+    Cancel
+  </ion-button>
+</ion-footer>

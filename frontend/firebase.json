@@ -1,0 +1,36 @@
+{
+    "hosting": {
+      "site": "inclouded-monitoring",
+      "public": "./www",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "headers": [
+        {
+          "source": "/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "max-age=36000"
+            },
+            {
+              "key": "ETag",
+              "value": "3061fedb86"
+            },
+            {
+              "key": "If-None-Match",
+              "value": "3061fedb86"
+            }
+          ]
+        }
+      ]
+    }
+  }

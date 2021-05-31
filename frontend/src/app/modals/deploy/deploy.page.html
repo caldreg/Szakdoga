@@ -1,0 +1,84 @@
+<ion-header>
+  <app-handel></app-handel>
+  <h2>
+    Start deployment
+    <br>
+    <span>
+      {{ project.name }} project
+    </span>
+  </h2>
+</ion-header>
+
+<ion-content>
+
+  <div id="content">
+
+    <ion-segment [(ngModel)]="state" value="Development" mode="md">
+      <ion-segment-button value="{{stage.name}}" *ngFor="let stage of project.stages">{{ stage.name }}</ion-segment-button>
+    </ion-segment>
+
+    <div id="stages">
+      <div *ngIf="state === 'Development'" mode="md" class="stage">
+        <ion-item>
+          <ion-icon slot="start" name="git-branch-outline"></ion-icon>
+          <ion-select value="master" disabled placeholder="Version to deploy">
+            <ion-select-option value="master">Master</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-button (click)="startDevelopment()">
+            <ion-icon slot="start" name="git-pull-request-outline"></ion-icon>
+            Start Deployment
+          </ion-button>
+          <ion-input disabled></ion-input>
+        </ion-item>
+      </div>
+
+      <div *ngIf="state === 'Staging'" mode="md" class="stage">
+        <ion-item>
+          <ion-icon slot="start" name="pricetag-outline"></ion-icon>
+          <ion-input [(ngModel)]="versionStaging" placeholder="Version" (ionChange)="onChangeTime($event.target.value)"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-button [disabled]="this.versionStaging.length <= 0 || this.contains" (click)="startStagingDeploy()">
+            <ion-icon slot="start" name="git-pull-request-outline"></ion-icon>
+            Start Deployment
+          </ion-button>
+          <ion-input disabled></ion-input>
+        </ion-item>
+      </div>
+
+      <div *ngIf="state === 'Production'" mode="md" class="stage">
+        <ion-item>
+          <ion-icon slot="start" name="pricetag-outline"></ion-icon>
+          <ion-input [(ngModel)]="versionProduction" placeholder="Version" (ionChange)="onChangeTime($event.target.value)"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-button [disabled]="this.versionProduction.length <= 0 || this.contains" (click)="startProductionDeploy()">
+            <ion-icon slot="start" name="git-pull-request-outline"></ion-icon>
+            Start Deployment
+          </ion-button>
+          <ion-input disabled></ion-input>
+        </ion-item>
+      </div>
+
+      <div *ngIf="state !== 'Production' && state !== 'Staging' && state !== 'Development'" mode="md" class="stage">
+        <ion-item>
+          <ion-icon slot="start" name="pricetag-outline"></ion-icon>
+          <ion-input placeholder="Version"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-button>
+            <ion-icon slot="start" name="git-pull-request-outline"></ion-icon>
+            Start Deployment
+          </ion-button>
+          <ion-input disabled></ion-input>
+        </ion-item>
+      </div>
+    </div>
+
+    
+
+  </div>
+
+</ion-content>

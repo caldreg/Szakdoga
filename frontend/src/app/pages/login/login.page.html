@@ -1,0 +1,27 @@
+<ion-content>
+
+    <ion-card mode="ios">
+        <ion-card-header>
+            <ion-card-title>Inclouded Monitor</ion-card-title>
+            <ion-card-subtitle>The whole infrastructure</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content (keypress)="eventHandler($event.keyCode)">
+
+            <ion-item mode="md">
+                <ion-icon slot="start" name="mail-outline"></ion-icon>
+                <ion-input (keyup)="getEmail($event)" placeholder="E-mail address"></ion-input>
+            </ion-item>
+
+            <ion-item mode="md">
+                <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
+                <ion-input type="password" (keyup)="getPassword($event)" placeholder="Password"></ion-input>
+            </ion-item>
+
+            <ion-item mode="md" lines="none">
+                <ion-button (click)="login()" size="small" color="primary">Login</ion-button>
+            </ion-item>
+
+        </ion-card-content>
+    </ion-card>
+
+</ion-content>

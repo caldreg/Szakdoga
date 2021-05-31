@@ -1,0 +1,7 @@
+{
+    "jenkins": {
+        "server": "http://localhost:8900",
+        "username": "",
+        "password": ""
+    }
+}

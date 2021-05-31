@@ -1,0 +1,116 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-button disabled>
+                <ion-icon size="large" name="albums"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons mode="ios" slot="secondary">
+            <ion-button (click)="openProjectAddPanel()" color="secondary" fill="solid" mode="md">
+                <ion-icon name="add-outline"></ion-icon>
+            </ion-button>
+            <ion-button [routerLink]="['/home']" fill="solid" color="white" mode="md">
+                <ion-icon name="arrow-back-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Integrated Projects</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <div id="panel">
+        <ion-segment mode="md" value="web" style="border-bottom: 1px solid rgba(211, 211, 211, 0.4)">
+            <ion-segment-button value="web">Web</ion-segment-button>
+            <ion-segment-button value="mobile">Mobil</ion-segment-button>
+        </ion-segment>
+
+        <ion-item>
+            <ion-icon slot="start" name="search"></ion-icon>
+            <ion-input placeholder="Search for project" (ionInput)="filterList($event)"></ion-input>
+
+        </ion-item>
+
+        <table *ngIf="dataSource.length > 0" mat-table [dataSource]="filteredProjects" class="mat-elevation-z8">
+            <ng-container matColumnDef="name">
+                <th class="th" mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let element">{{element.name}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="lastDeploy">
+                <th class="th" mat-header-cell *matHeaderCellDef>Last deploy</th>
+                <td mat-cell *matCellDef="let element">{{getLastDeployString(element.lastDeploy) || '-'}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="lastStatus">
+                <th class="th" mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let element">
+
+                    <div *ngIf="element.status === 'Not deployed'" class="dot-con not-deployed">
+                        <span class="dot"></span> {{ element.status }}
+                    </div>
+
+                    <div *ngIf="element.status === 'Success'" class="dot-con success">
+                        <span class="dot"></span> {{ element.status }}
+                    </div>
+
+                    <div *ngIf="element.status === 'Failed'" class="dot-con failed">
+                        <span class="dot"></span> {{ element.status }}
+                    </div>
+
+                    <div *ngIf="element.status === 'Running'" class="dot-con running">
+                        <span class="dot"></span> {{ element.status }}
+                    </div>
+
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="development">
+                <th class="th" mat-header-cell *matHeaderCellDef>Development</th>
+                <td mat-cell *matCellDef="let element">{{element.stages[0].version || '-'}}</td>
+                <ng-template #defaultValue>-</ng-template>
+            </ng-container>
+
+            <ng-container matColumnDef="staging">
+                <th class="th" mat-header-cell *matHeaderCellDef>Staging</th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.stages[1];else defaultValue">
+                        {{element.stages[1].version || '-'}}
+                    </ng-container>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="production">
+                <th class="th" mat-header-cell *matHeaderCellDef>Production</th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.stages[2];else defaultValue">
+                        {{element.stages[2].version || '-'}}
+                    </ng-container>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th class="th" mat-header-cell *matHeaderCellDef></th>
+                <td style="text-align: right;" mat-cell *matCellDef="let element">
+                    <ion-button *ngIf="element.status === 'Running'" color="primary" size="small">
+                        <ion-icon class="spin" name="settings-outline"></ion-icon>
+                    </ion-button>
+                    <ion-button (click)="openDeployPanel(element)" color="primary" size="small">
+                        <ion-icon name="arrow-up-circle-outline"></ion-icon>
+                    </ion-button>
+                    <ion-button (click)="openRollBackPanel(element)" color="primary" size="small">
+                        <ion-icon name="git-compare-outline"></ion-icon>
+                    </ion-button>
+                    <ion-button (click)="openEditProject(element)" color="primary" size="small">
+                        <ion-icon name="construct-outline"></ion-icon>
+                    </ion-button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+
+
+</ion-content>

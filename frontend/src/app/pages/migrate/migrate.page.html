@@ -1,0 +1,362 @@
+<ion-header mode="md">
+    <ion-toolbar mode="md">
+        <ion-buttons mode="md" slot="start">
+            <ion-button disabled>
+                <ion-icon size="large" name="server"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons mode="md" slot="secondary">
+            <ion-button [routerLink]="['/home']" fill="solid" mode="md" color="primary">
+                <ion-icon name="arrow-back-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Data migration</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <div id="container">
+        <ion-segment mode="md" value="{{ mode }}" (ionChange)="modeChanged($event)">
+            <ion-segment-button value="collections">
+                <ion-label>Collections</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="users">
+                <ion-label>Users</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="indexes">
+                <ion-label>Indexes</ion-label>
+            </ion-segment-button>
+        </ion-segment>
+    </div>
+
+    <div *ngIf="mode == 'collections'">
+        <ion-card mode="ios">
+            <ion-card-header>
+                <ion-card-title>Collections</ion-card-title>
+                <ion-card-subtitle>Migrate collections between projects</ion-card-subtitle>
+            </ion-card-header>
+            <!-- Projektek beállítása -->
+            <ion-card-content>
+                <ion-grid mode="md">
+                    <ion-row>
+
+                        <ion-col>
+                            <ion-item>
+                                <ion-icon slot="start" name="radio-button-on-outline"></ion-icon>
+                                <ion-select (ionChange)="getFromProject($event)" placeholder="Select a project from migrate" okText="Okay" cancelText="Dismiss">
+                                    <ion-select-option value="{{project.name}}" *ngFor="let project of projects">{{ project.name }}
+                                    </ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                        </ion-col>
+
+                        <ion-col>
+                            <ion-item>
+                                <ion-icon slot="start" name="arrow-forward-circle-outline"></ion-icon>
+                                <ion-select (ionChange)="getToProject($event)" placeholder="Select a project to migrate" okText="Okay" cancelText="Dismiss">
+                                    <ion-select-option *ngFor="let project of projects" value="{{project.name}}">{{ project.name }}
+                                    </ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-grid>
+
+                <!-- Stageek beállítása -->
+                <ion-grid mode="md">
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-icon slot="start" name="cube-outline"></ion-icon>
+                                <ion-select #fromStageSelector (ionChange)="setFromStage($event)" placeholder="Select the project stage" okText="Okay" cancelText="Dismiss">
+                                    <ion-select-option *ngFor="let stage of getFromStages()" value="{{stage.name}}">
+                                        {{ stage.name }}
+                                    </ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col>
+                            <ion-item>
+                                <ion-icon slot="start" name="cube-outline"></ion-icon>
+                                <ion-select #toStageSelector (ionChange)="getToStage($event)" placeholder="Select the project stage" okText="Okay" cancelText="Dismiss">
+                                    <ion-select-option *ngFor="let stage of getToStages()" value="{{stage.name}}">
+                                        {{ stage.name }}
+                                    </ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+
+                <!-- Collectionök kiválasztása -->
+                <ion-card style="box-shadow: none;" *ngIf="collectionRequest.collections.length > 0 && collectionRequest.to.length > 0 && collectionRequest.toStage.length > 0" mode="ios">
+
+                    <ion-list mode="md">
+                        <ion-list-header>Select collections to migrate</ion-list-header>
+                        <ion-item>
+                            <ion-label><strong>Select All</strong></ion-label>
+                            <ion-checkbox (ionChange)="selectAll($event)" slot="start" multiple="true">
+                            </ion-checkbox>
+                        </ion-item>
+                        <ion-item>
+                            <ion-button (click)="expandCollections()">
+                                <ion-icon *ngIf="!collectionsExpanded" slot="start" name="arrow-down-circle-outline"></ion-icon>
+                                <ion-icon *ngIf="collectionsExpanded" slot="start" name="arrow-up-circle-outline"></ion-icon>
+                                Show all collection
+                            </ion-button>
+                        </ion-item>
+                        <div class="collections-list" *ngIf="this.collectionsExpanded">
+                            <ion-item *ngFor="let collection of collectionRequest.collections; let i = index">
+                                <ion-label>{{ collection.name }}</ion-label>
+                                <ion-checkbox [(ngModel)]="collectionRequest.collections[i].checked" slot="start" multiple="true">
+                                </ion-checkbox>
+                            </ion-item>
+                        </div>
+                    </ion-list>
+
+                </ion-card>
+
+                <div style="display: flex; align-items: center;">
+                    <ion-button (click)="presentAlertConfirm()" [disabled]="startDisabled" #startButton style="margin: 20px;" mode="md">
+                        <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+                        Start migration
+                    </ion-button>
+                    <div *ngIf="migrating" style="display: flex; align-items: center; margin-left: 12px;;">
+                        <ion-spinner></ion-spinner>
+                        <span style="margin-left: 8px;">Migrating data</span>
+                    </div>
+                </div>
+
+            </ion-card-content>
+        </ion-card>
+    </div>
+
+
+
+    <!-- Users  ------------------------------------------------------------------->
+
+    <div *ngIf="mode == 'users'">
+        <ion-card mode="ios">
+            <ion-card-header>
+                <ion-card-title>Users</ion-card-title>
+                <ion-card-subtitle>Migrate users between projects</ion-card-subtitle>
+            </ion-card-header>
+
+            <!-- Projektek beállítása -->
+            <ion-card-content>
+                <ion-grid mode="md">
+                    <ion-row>
+
+                        <ion-col>
+                            <ion-item>
+                                <ion-icon slot="start" name="radio-button-on-outline"></ion-icon>
+                                <ion-select (ionChange)="getUserFromProject($event)" placeholder="Select a project from migrate" okText="Okay" cancelText="Dismiss">
+                                    <ion-select-option value="{{project.name}}" *ngFor="let project of projects">{{ project.name }}
+                                    </ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                        </ion-col>
+
+                        <ion-col>
+                            <ion-item>
+                                <ion-icon slot="start" name="arrow-forward-circle-outline"></ion-icon>
+                                <ion-select (ionChange)="getUserToProject($event)" placeholder="Select a project to migrate" okText="Okay" cancelText="Dismiss">
+                                    <ion-select-option *ngFor="let project of projects" value="{{project.name}}">{{ project.name }}
+                                    </ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-grid>
+
+
+                <!-- Stageek beállítása -->
+                <ion-grid mode="md">
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-icon slot="start" name="person-outline"></ion-icon>
+                                <ion-select #fromUserStageSelector (ionChange)="setUserFromStage($event)" placeholder="Select the project stage" okText="Okay" cancelText="Dismiss">
+                                    <ion-select-option *ngFor="let stage of getUserFromStages()" value="{{stage.name}}">
+                                        {{ stage.name }}
+                                    </ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col>
+                            <ion-item>
+                                <ion-icon slot="start" name="person-add-outline"></ion-icon>
+                                <ion-select #toUserStageSelector (ionChange)="getUserToStage($event)" placeholder="Select the project stage" okText="Okay" cancelText="Dismiss">
+                                    <ion-select-option *ngFor="let stage of getUserToStages()" value="{{stage.name}}">
+                                        {{ stage.name }}
+                                    </ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+
+
+
+                <!-- User selector settings -->
+                <ion-card style="box-shadow: none;" *ngIf="userRequest.users.length > 0 && userRequest.to.length > 0 && userRequest.toStage.length > 0" mode="ios">
+
+                    <ion-list mode="md">
+                        <ion-list-header>Select users to migrate</ion-list-header>
+                        <ion-item>
+                            <ion-label><strong>Select All User</strong></ion-label>
+                            <ion-checkbox (ionChange)="selectAllUser($event)" slot="start" multiple="true">
+                            </ion-checkbox>
+                        </ion-item>
+                        <ion-item>
+                            <ion-button (click)="expandUsers()">
+                                <ion-icon *ngIf="!usersExpanded" slot="start" name="arrow-down-circle-outline"></ion-icon>
+                                <ion-icon *ngIf="usersExpanded" slot="start" name="arrow-up-circle-outline"></ion-icon>
+                                Show all user
+                            </ion-button>
+                        </ion-item>
+                        <div class="users-list" *ngIf="this.usersExpanded">
+                            <ion-item *ngFor="let user of userRequest.users; let i = index">
+                                <ion-label>{{ user.name }}</ion-label>
+                                <ion-checkbox [(ngModel)]="userRequest.users[i].checked" slot="start" multiple="true">
+                                </ion-checkbox>
+                            </ion-item>
+                        </div>
+                    </ion-list>
+
+                </ion-card>
+
+                <!-- User button settings -->
+                <div style="display: flex; align-items: center;">
+                    <ion-button (click)="userAlertConfirm()" [disabled]="startUserDisabled" #startUserButton style="margin: 20px;" mode="md">
+                        <ion-icon slot="start" name="walk-outline"></ion-icon>
+                        Start migration
+                    </ion-button>
+                    <div *ngIf="migrating" style="display: flex; align-items: center; margin-left: 12px;;">
+                        <ion-spinner></ion-spinner>
+                        <span style="margin-left: 8px;">Migrating data</span>
+                    </div>
+                </div>
+
+
+
+
+            </ion-card-content>
+        </ion-card>
+    </div>
+
+
+    <div *ngIf="mode == 'indexes'">
+        <ion-card mode="ios">
+            <ion-card-header>
+                <ion-card-title>Indexes</ion-card-title>
+                <ion-card-subtitle>Migrate indexes between projects</ion-card-subtitle>
+            </ion-card-header>
+            <!-- Projektek beállítása -->
+            <ion-card-content>
+                <ion-grid mode="md">
+                    <ion-row>
+
+                        <ion-col>
+                            <ion-item>
+                                <ion-icon slot="start" name="radio-button-on-outline"></ion-icon>
+                                <ion-select (ionChange)="getIndexFromProject($event)" placeholder="Select a project from migrate" okText="Okay" cancelText="Dismiss">
+                                    <ion-select-option value="{{project.name}}" *ngFor="let project of projects">{{ project.name }}
+                                    </ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                        </ion-col>
+
+                        <ion-col>
+                            <ion-item>
+                                <ion-icon slot="start" name="arrow-forward-circle-outline"></ion-icon>
+                                <ion-select (ionChange)="getIndexToProject($event)" placeholder="Select a project to migrate" okText="Okay" cancelText="Dismiss">
+                                    <ion-select-option *ngFor="let project of projects" value="{{project.name}}">{{ project.name }}
+                                    </ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-grid>
+
+                <!-- Stageek beállítása -->
+                <ion-grid mode="md">
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-icon slot="start" name="list-outline"></ion-icon>
+                                <ion-select #fromIndexStageSelector (ionChange)="setIndexFromStage($event)" placeholder="Select the project stage" okText="Okay" cancelText="Dismiss">
+                                    <ion-select-option *ngFor="let stage of getIndexFromStages()" value="{{stage.name}}">
+                                        {{ stage.name }}
+                                    </ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col>
+                            <ion-item>
+                                <ion-icon slot="start" name="list-outline"></ion-icon>
+                                <ion-select #toIndexStageSelector (ionChange)="getIndexToStage($event)" placeholder="Select the project stage" okText="Okay" cancelText="Dismiss">
+                                    <ion-select-option *ngFor="let stage of getIndexToStages()" value="{{stage.name}}">
+                                        {{ stage.name }}
+                                    </ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+
+                <!-- Indexek kiválasztása -->
+                <ion-card style="box-shadow: none;" *ngIf="indexRequest.indexes.length > 0 && indexRequest.to.length > 0 && indexRequest.toStage.length > 0" mode="ios">
+
+                    <ion-list mode="md">
+                        <ion-list-header>Select Indexes to migrate</ion-list-header>
+                        <ion-item>
+                            <ion-label><strong>Select All</strong></ion-label>
+                            <ion-checkbox (ionChange)="selectAllIndex($event)" slot="start" multiple="true">
+                            </ion-checkbox>
+                        </ion-item>
+                        <ion-item>
+                            <ion-button (click)="expandIndexes()">
+                                <ion-icon *ngIf="!collectionsExpanded" slot="start" name="arrow-down-circle-outline"></ion-icon>
+                                <ion-icon *ngIf="collectionsExpanded" slot="start" name="arrow-up-circle-outline"></ion-icon>
+                                Show all Indexes
+                            </ion-button>
+                        </ion-item>
+                        <div class="indexes-list" *ngIf="this.indexesExpanded">
+                            <!-- ezt majd irni kell -->
+                            <ion-item *ngFor="let collection of collectionRequest.collections; let i = index">
+                                <ion-label>{{ collection.name }}</ion-label>
+                                <ion-checkbox [(ngModel)]="collectionRequest.collections[i].checked" slot="start" multiple="true">
+                                </ion-checkbox>
+                            </ion-item>
+                        </div>
+                    </ion-list>
+
+                </ion-card>
+
+                <div style="display: flex; align-items: center;">
+                    <ion-button (click)="indexAlertConfirm()" [disabled]="startDisabled" #startIndexButton style="margin: 20px;" mode="md">
+                        <ion-icon slot="start" name="file-tray-full-outline"></ion-icon>
+                        Start migration
+                    </ion-button>
+                    <div *ngIf="migrating" style="display: flex; align-items: center; margin-left: 12px;;">
+                        <ion-spinner></ion-spinner>
+                        <span style="margin-left: 8px;">Migrating data</span>
+                    </div>
+                </div>
+
+            </ion-card-content>
+        </ion-card>
+    </div>
+
+
+
+
+
+
+
+</ion-content>
